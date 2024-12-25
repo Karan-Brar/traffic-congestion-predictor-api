@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "eQLO6uLsVy/cj+0EuSGJMN8jgd0uWwffYf6jGSUxV4w=",
+  "Source": "TrafficMonitorAPI",
+  "BasePath": "_content/TrafficMonitorAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

@@ -1,7 +1,11 @@
 using DotNetEnv;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+DotNetEnv.Env.Load();
 
 string googleMapsApiKey = Environment.GetEnvironmentVariable("GOOGLE_MAPS_API_KEY");
 string googlePlacesApiKey = Environment.GetEnvironmentVariable("GOOGLE_PLACES_API_KEY");
@@ -9,9 +13,12 @@ string googleDirectionsApiKey = Environment.GetEnvironmentVariable("GOOGLE_DIREC
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddHttpClient();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton(new TrafficService(googleApiKey));
+builder.Services.AddScoped<TrafficService>(sp =>
+    new TrafficService(sp.GetRequiredService<HttpClient>(), googleMapsApiKey, googlePlacesApiKey, googleDirectionsApiKey)
+);
 
 var app = builder.Build();
 
@@ -24,29 +31,18 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
+app.MapGet("/api/traffic/key-areas/{city}", async (string city, TrafficService trafficService) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    var trafficData = await trafficService.GetTrafficForCityAsync(city);
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+    if (trafficData == null)
+    {
+        return Results.NotFound(new { message = "No traffic data found for the specified city." });
+    }
+
+    return Results.Ok(trafficData);
+}).WithName("GetTrafficData").WithOpenApi();
+
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
