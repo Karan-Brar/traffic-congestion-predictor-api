@@ -1,9 +1,17 @@
+using DotNetEnv;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+string googleMapsApiKey = Environment.GetEnvironmentVariable("GOOGLE_MAPS_API_KEY");
+string googlePlacesApiKey = Environment.GetEnvironmentVariable("GOOGLE_PLACES_API_KEY");
+string googleDirectionsApiKey = Environment.GetEnvironmentVariable("GOOGLE_DIRECTIONS_API_KEY");
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSingleton(new TrafficService(googleApiKey));
 
 var app = builder.Build();
 
