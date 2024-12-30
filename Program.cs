@@ -8,9 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 DotNetEnv.Env.Load();
 
-//string googleMapsApiKey = Environment.GetEnvironmentVariable("GOOGLE_MAPS_API_KEY");
-//string googlePlacesApiKey = Environment.GetEnvironmentVariable("GOOGLE_PLACES_API_KEY");
-//string googleDirectionsApiKey = Environment.GetEnvironmentVariable("GOOGLE_DIRECTIONS_API_KEY");
 string hereApiKey = Environment.GetEnvironmentVariable("HERE_API_KEY");
 
 // Add services to the container.
@@ -47,7 +44,6 @@ app.UseCors("AllowAll");
 
 app.MapGet("/api/traffic/{city}", async (string city, TrafficService trafficService) =>
 {
-    // Step 1: Get city center and approximate bounds
     var cityCenter = await trafficService.GetCenterForCityAsync(city);
     double latMin = cityCenter.Latitude - 0.05;
     double latMax = cityCenter.Latitude + 0.05;
@@ -55,7 +51,7 @@ app.MapGet("/api/traffic/{city}", async (string city, TrafficService trafficServ
     double lngMax = cityCenter.Longitude + 0.05;
     double gridSize = 0.01;
 
-    var gridCells = await trafficService.GenerateGrid(latMin, latMax, lngMin, lngMax, gridSize);
+    var gridCells = trafficService.GenerateGrid(latMin, latMax, lngMin, lngMax, gridSize);
 
     var trafficData = await trafficService.GetTrafficForCityGridAsync(gridCells);
 
