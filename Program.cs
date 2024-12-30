@@ -45,11 +45,11 @@ app.UseCors("AllowAll");
 app.MapGet("/api/traffic/{city}", async (string city, TrafficService trafficService) =>
 {
     var cityCenter = await trafficService.GetCenterForCityAsync(city);
-    double latMin = cityCenter.Latitude - 0.05;
-    double latMax = cityCenter.Latitude + 0.05;
-    double lngMin = cityCenter.Longitude - 0.05;
-    double lngMax = cityCenter.Longitude + 0.05;
-    double gridSize = 0.01;
+    double latMin = cityCenter.Latitude - 0.09;
+    double latMax = cityCenter.Latitude + 0.09;
+    double lngMin = cityCenter.Longitude - 0.09;
+    double lngMax = cityCenter.Longitude + 0.09;
+    double gridSize = 0.02;
 
     var gridCells = trafficService.GenerateGrid(latMin, latMax, lngMin, lngMax, gridSize);
 
