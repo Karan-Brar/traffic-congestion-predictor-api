@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TrafficMonitorAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+776cc1feb3c260bf4a917380b8e82da22bba9709")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+335eaaa12d39a1f02267f31738a55e80500f3dea")]
 [assembly: System.Reflection.AssemblyProductAttribute("TrafficMonitorAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TrafficMonitorAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
